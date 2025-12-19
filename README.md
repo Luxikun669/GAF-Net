@@ -16,5 +16,6 @@ We plan to open-source:
 - ⏳ Decision / camera-ready: TBA
 - 🚀 Code release: TBA
 
-> Note: The configs are provided to clarify experimental settings and ease verification of our reported results during peer review.
+> [!IMPORTANT]
+> The configs are provided to clarify experimental settings and ease verification of our reported results during peer review.
 > The complete reproducibility package will be released after acceptance.

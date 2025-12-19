@@ -1,4 +1,3 @@
-# GAF-Net
 # A Lightweight Fourier-based Network for Binaural Speech Enhancement with Spatial Cue Preservation
 > **Status:** Under review. We will release code, trained models, and data preparation scripts **upon paper acceptance**.
 

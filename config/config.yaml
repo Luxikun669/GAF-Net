@@ -1,0 +1,131 @@
+dataset:
+  noisy_test_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/noisy_testset_1f
+  noisy_training_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/noisy_trainset_1f
+  noisy_validation_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/noisy_valset_1f
+  target_test_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/clean_testset_1f
+  target_training_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/clean_trainset_1f
+  target_validation_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/clean_valset_1f
+
+
+  test_snr_subdirs:
+    - SNR_-6dB
+    - SNR_-3dB
+    - SNR_+0dB
+    - SNR_+3dB
+    - SNR_+6dB
+    - SNR_+9dB
+    - SNR_+12dB
+    - SNR_+15dB
+
+
+defaults:
+  - model
+  - training
+  - dataset: speech_dataset
+
+model:
+  # === Multi-objective loss weights ===
+  ild_weight: 1
+  ipd_weight: 10
+  snr_loss_weight: 1
+  stoi_weight: 10
+
+  # ===== Gammatone & Blending Method =====
+  use_gammatone: true           # false = STFT only | true = fused with STFT
+  fusion_mode: se_attn          # none | concat | se_attn
+  n_gammatones: 64
+
+  # ===== Unified switch for frequency band gate =====
+  gate:
+    mode: "dynamic"                   # "dynamic" | "static" | "off"
+    init_logit: -1.5            # Use only in static mode
+
+  # ===== Dry/Wet =====
+  dry_wet:
+    mode: off                   # snr_sigmoid | learned | off
+    tau_db: 9.0
+    beta: 0.7
+    min_lambda: 0.05
+    max_lambda: 0.95
+    apply_on: stft              # waveform | stft
+    apply_in_training: false
+
+  # ===== α regularity =====
+  lam_alpha_sparse: 0      # 1e-4
+  lam_alpha_entropy: 0
+  lam_alpha_tv: 0
+
+  # ===== Backbone Unified Entry Point =====
+  backbone:
+    # conformer_attn | conformer_noattn | fourier_mlp | cvkan | conv_rnn
+    name: fourier_mlp
+    causal_time: true
+    params:
+      out_ch: 32                # 32
+      embed_dim: 80
+      num_layers: 2
+      ffn_hidden: 80
+      conv_kernel: 13
+      num_heads: 2
+      dropout: 0.10
+
+      # Blocks
+      chunk_size_F: 16   # 16
+      chunk_size_T: null
+      pack_F: 1
+      pack_T: 1
+
+      # Fourier-MLP
+      fk_width: 64    # 64
+      fk_layers: 1
+      fk_gates: 6    # 6
+      enable_freq_mixer: false
+      freq_mixer_kernel: 3
+      freq_mixer_every: 1
+      gate_temp: 0.9
+
+      # CVKAN
+      cv_layers: 1
+      cv_width: 48
+      cv_basis: rbf
+      cv_num_grids: 3
+      cv_rank: 4
+      cv_rho: 1.0
+      cv_max_omega: 3.14159
+
+      # Conv-RNN/Conv2D backbone
+      rnn_out_ch: 32
+
+training:
+  run_test_after_fit: true
+  test_ckpt_path: best
+
+rtf:
+  enabled: true            # Enable RTF measurement
+  sample_rate: 48000
+
+  # Test immediately before training
+  measure_early: true
+  exit_after: false        
+
+  # Also test once after each SNR group test
+  measure_during_test: false
+
+  # CPU
+  measure_cpu: true
+  cpu_threads: 8           
+  cpu_batch_size: 1
+  cpu_num_workers: 0
+  cpu_pin_memory: false
+
+  # GPU
+  measure_gpu: false       
+  gpu_batch_size: 1
+  gpu_num_workers: 0
+  gpu_pin_memory: true
+  gpu_use_amp: false        # Mixing accuracy
+
+  # Preheating and Sampling
+  warmup_batches: 5
+  max_batches: 200         
+

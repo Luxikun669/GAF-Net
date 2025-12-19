@@ -1,0 +1,27 @@
+model:
+
+  arch: cfkan     # cdnn | tasnet_mimo | attention_dcnn | lbccn | cfkan
+  binaural: true
+
+  # cdnn:
+  n_fft: 1024    # 1024
+  hop: 512      # 512
+  freq_bins_used: 257
+  ctx_frames: 7
+  hidden_dim: 1024
+  num_layers: 4
+  dropout_p: 0.5
+  apply_mode: real_split   # complex_split
+
+  # mimo_tasnet:
+  n_src: 1
+  n_enc: 64
+  L: 16
+  stride: 8
+  tcn_blocks: 8
+  tcn_repeats: 4
+  tcn_hidden: 104
+  tcn_kernel: 3
+  causal: true
+
+  

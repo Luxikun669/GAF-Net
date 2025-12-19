@@ -1,0 +1,31 @@
+training:
+  accelerator: gpu
+  devices: 1
+  strategy: auto
+
+  batch_size: 20
+  n_epochs: 100     
+  optimizer: adamw
+  learning_rate: 0.0002
+  weight_decay: 0.0001
+  grad_clip_val: 1.0
+
+  # === MultiStepLR ===
+  learning_rate_decay_steps: [30, 45, 60, 75]      
+  learning_rate_decay_values: 0.5
+
+  n_workers: 4
+  pin_memory: true
+  train_checkpoint_path: null
+
+  early_stopping:
+    enabled: True
+    key_to_monitor: val_loss
+    min_delta: 0.005   # 0.005/0.01/0.1
+    patience_in_epochs: 8
+
+  profile:
+    enabled: true
+    mode: e2e     # e2e/backbone
+
+  

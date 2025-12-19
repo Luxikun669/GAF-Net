@@ -1,0 +1,23 @@
+sr: 16000
+## Dataset 1, Dataset 2
+dataset:
+  noisy_test_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/noisy_testset_1f
+  noisy_training_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/noisy_trainset_1f
+  noisy_validation_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/noisy_valset_1f
+  target_test_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/clean_testset_1f
+  target_training_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/clean_trainset_1f
+  target_validation_dataset_dir: /mnt/sdb1_newdisk/lu_project/binaural_speech_enhancement/BCCTN/datasets/final/Dataset/clean_valset_1f
+
+
+  test_snr_subdirs:
+    - SNR_-6dB
+    - SNR_-3dB
+    - SNR_+0dB
+    - SNR_+3dB
+    - SNR_+6dB
+    - SNR_+9dB
+    - SNR_+12dB
+    - SNR_+15dB  
+
+
+
